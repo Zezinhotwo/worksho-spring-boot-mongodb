@@ -14,15 +14,14 @@ import com.akio.workshopmongo.services.exception.ObjectNotFoundException;
 
 @Service
 public class UserService {
-
-    private final Instantiation instantiation;
+	private final Instantiation instantiation;
 
 	@Autowired
 	private UserRepository repo;
 
-    UserService(Instantiation instantiation) {
-        this.instantiation = instantiation;
-    }
+	UserService(Instantiation instantiation) {
+		this.instantiation = instantiation;
+	}
 
 	public List<User> findAll() {
 		return repo.findAll();
@@ -33,13 +32,18 @@ public class UserService {
 
 		return user.orElseThrow(() -> new ObjectNotFoundException("Objeto not found!" + id));
 	}
-	
+
 	public User insert(User obj) {
 		return repo.insert(obj);
 	}
-	
-	public User fromDTO(UserDTO objDto) {
-		return new User(objDto.getId(), objDto.getName(),objDto.getEmail());
+
+	public void delete(String obj) {
+		findById(obj);
+		repo.deleteById(obj);
 	}
-	
+
+	public User fromDTO(UserDTO objDto) {
+		return new User(objDto.getId(), objDto.getName(), objDto.getEmail());
+	}
+
 }
