@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.akio.workshopmongo.config.Instantiation;
@@ -40,6 +41,19 @@ public class UserService {
 	public void delete(String obj) {
 		findById(obj);
 		repo.deleteById(obj);
+	}
+
+	public User update(User obj) {
+		User entity = repo.findById(obj.getId())
+				.orElseThrow(() -> new ObjectNotFoundException("Objeto not found! Id: " + obj.getId()));
+
+		updateData(entity, obj);
+		return repo.save(entity);
+	}
+
+	private void updateData(User newObj, User obj) {
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
 	}
 
 	public User fromDTO(UserDTO objDto) {
